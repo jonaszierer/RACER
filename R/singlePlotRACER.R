@@ -31,7 +31,12 @@
 #' singlePlotRACER(assoc_data = mark3_bmd_gwas_f_ld, chr = 14,
 #' build = "hg19", plotby = "coord", start_plot = 103500000, end_plot = 104500000)}
 
-singlePlotRACER <- function(assoc_data, chr, build="hg19", set = "protein_coding", plotby, gene_plot = NULL, snp_plot = NULL, start_plot=NULL, end_plot = NULL, label_lead = FALSE){
+singlePlotRACER <- function(assoc_data, chr,
+                            build="hg19", set = "protein_coding",
+                            plotby, gene_plot = NULL,
+                            snp_plot = NULL, start_plot=NULL, end_plot = NULL,
+                            label_lead = FALSE,
+                            textsize = 8){
 
   if(missing(assoc_data)){
     stop("Please provide a data set to plot.")
@@ -140,23 +145,37 @@ singlePlotRACER <- function(assoc_data, chr, build="hg19", set = "protein_coding
   message("Generating Plot")
   if("LD" %in% colnames(in.dt) && "LD_BIN" %in% colnames(in.dt)){
     c = ggplot2::ggplot(gene_sub, ggplot2::aes_string(x = "value", y = "y_value")) +
-      ggplot2::geom_line(ggplot2::aes_string(group = "GENE_NAME"), size = 2) + ggplot2::theme_bw() +
-      ggplot2::geom_text(data = plot_lab, ggplot2::aes_string(x = "value", y = "y_value", label = "GENE_NAME"),
-                         hjust = -0.1,vjust = 0.3, size = 2.5) +
-      ggplot2::theme(axis.title.y = ggplot2::element_text(color = "white", size = 28),
-                     axis.text.y = ggplot2::element_blank(),
-                     axis.ticks.y = ggplot2::element_blank()) +
-      ggplot2::xlab(paste0("Position (chromsome ", chr_in, ")")) +
-      ggplot2::coord_cartesian(xlim = c(start,end), ylim = c(0,(max(gene_sub$y_value)+1)))
+        ggplot2::geom_line(ggplot2::aes_string(group = "GENE_NAME"), size = 2) + ggplot2::theme_bw() +
+        ggplot2::geom_text(data = plot_lab, ggplot2::aes(x = value, y = y_value, label = GENE_NAME),
+                           hjust = -0.1,vjust = 0.3, size = textsize/(14/5)*0.8) +
+        ggplot2::theme(axis.title.y = ggplot2::element_text(color = "white", size = 28),
+                       axis.text.y = ggplot2::element_blank(),
+                       axis.ticks.y = ggplot2::element_blank()) +
+        ggplot2::xlab(paste0("Position (chromsome ", chr_in, ")")) +
+        ggplot2::coord_cartesian(xlim = c(start,end), ylim = c(0,(max(gene_sub$y_value)+1))) +
+        ggplot2::theme(text         = ggplot2::element_text(size = textsize),
+                       axis.title   = ggplot2::element_text(face = "bold"),
+                       legend.title = ggplot2::element_text(face = "bold"),
+                       plot.margin  = ggplot2::unit(c(0,0,0,0), "cm"))
 
     b = ggplot2::ggplot(in.dt, ggplot2::aes_string(x = "POS", y = "LOG10P", color = "LD_BIN")) +
-      ggplot2::geom_point() +
-      ggplot2::scale_colour_manual(
-        values = c("1.0-0.8" = "red", "0.8-0.6" = "darkorange1", "0.6-0.4" = "green1",
-                   "0.4-0.2" = "skyblue1", "0.2-0.0" = "navyblue", "NA" = "grey"), drop = FALSE) +
-      ggplot2::theme_bw() +
-      ggplot2::xlab(NULL) + ggplot2::ylab("-log10(p-value)") +
-      ggplot2::coord_cartesian(xlim = c(start, end), ylim = c(min(in.dt$LOG10P),max(in.dt$LOG10P)))
+        ggplot2::geom_point() +
+        ggplot2::scale_colour_manual(
+                     values = c("1.0-0.8" = "red", "0.8-0.6" = "darkorange1", "0.6-0.4" = "green1",
+                                "0.4-0.2" = "skyblue1", "0.2-0.0" = "navyblue", "NA" = "grey"), drop = FALSE) +
+        ggplot2::theme_bw() +
+        ggplot2::labs(x      = NULL,
+                      y      = "-log10(p-value)",
+                      colour = bquote(R^2)) +
+        ggplot2::coord_cartesian(xlim = c(start, end),
+                                 ylim = c(min(in.dt$LOG10P),max(in.dt$LOG10P))) +
+        ggplot2::theme(text         = ggplot2::element_text(size = textsize),
+                       axis.title   = ggplot2::element_text(face = "bold"),
+                       legend.title = ggplot2::element_text(face = "bold"),
+                       axis.text.x  = ggplot2::element_blank(),
+                       axis.ticks.x = ggplot2::element_blank(),
+                       plot.margin  = ggplot2::unit(c(0,0,0,0), "cm"))
+                       
 
   }else{
     c = ggplot2::ggplot(gene_sub, ggplot2::aes_string(x = "value", y = "y_value")) +
@@ -169,14 +188,24 @@ singlePlotRACER <- function(assoc_data, chr, build="hg19", set = "protein_coding
       ggplot2::coord_cartesian(xlim = c(start,end), ylim = c(0,(max(gene_sub$y_value)+1)))
 
     b = ggplot2::ggplot(in.dt, ggplot2::aes_string(x = "POS", y = "LOG10P")) +
-      ggplot2::geom_point() + ggplot2::theme_bw() + ggplot2::xlab("Chromosome Position") +
-      ggplot2::ylab("-log10(p-value)") +
-      ggplot2::coord_cartesian(xlim = c(start, end), ylim = c(min(in.dt$LOG10P),max(in.dt$LOG10P)))
+        ggplot2::geom_point() +
+        ggplot2::theme_bw() +
+        ggplot2::xlab("Chromosome Position") +
+        ggplot2::ylab("-log10(p-value)") +
+        ggplot2::coord_cartesian(xlim = c(start, end),
+                                 ylim = c(min(in.dt$LOG10P),max(in.dt$LOG10P)))
   }
   if(label_lead == TRUE){
-    b = b + geom_point(data = label_data, aes_string(x = "POS", y = "LOG10P"), color = "purple")
-    b = b + geom_text(data = label_data, aes_string(label = "RS_ID"), color = "black", size = 3, hjust = 1.25)
+      b = b + geom_point(data = label_data,
+                         aes_string(x = "POS", y = "LOG10P"),
+                         color = "purple")
+      b = b + geom_text(data = label_data, aes_string(label = "RS_ID"),
+                        color = "black",
+                        size = textsize/(14/5)*0.8,
+                        hjust = 1.25)
   }
-  ggpubr::ggarrange(b, c, heights = c(3,1), nrow = 2, ncol = 1,
-                    common.legend = TRUE, legend = "right")
+    ggpubr::ggarrange(b, c, heights = c(3,1),
+                      nrow = 2, ncol = 1,
+                      align = "v",
+                      common.legend = TRUE, legend = "right")
 }
