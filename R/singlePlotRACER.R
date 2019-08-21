@@ -146,7 +146,7 @@ singlePlotRACER <- function(assoc_data, chr, build="hg19", set = "protein_coding
       ggplot2::theme(axis.title.y = ggplot2::element_text(color = "white", size = 28),
                      axis.text.y = ggplot2::element_blank(),
                      axis.ticks.y = ggplot2::element_blank()) +
-      ggplot2::xlab(paste0("Chromosome ", chr_in, " Position")) +
+      ggplot2::xlab(paste0("Position (chromsome ", chr_in, ")")) +
       ggplot2::coord_cartesian(xlim = c(start,end), ylim = c(0,(max(gene_sub$y_value)+1)))
 
     b = ggplot2::ggplot(in.dt, ggplot2::aes_string(x = "POS", y = "LOG10P", color = "LD_BIN")) +
@@ -155,7 +155,7 @@ singlePlotRACER <- function(assoc_data, chr, build="hg19", set = "protein_coding
         values = c("1.0-0.8" = "red", "0.8-0.6" = "darkorange1", "0.6-0.4" = "green1",
                    "0.4-0.2" = "skyblue1", "0.2-0.0" = "navyblue", "NA" = "grey"), drop = FALSE) +
       ggplot2::theme_bw() +
-      ggplot2::xlab("Chromosome Position") + ggplot2::ylab("-log10(p-value)") +
+      ggplot2::xlab(NULL) + ggplot2::ylab("-log10(p-value)") +
       ggplot2::coord_cartesian(xlim = c(start, end), ylim = c(min(in.dt$LOG10P),max(in.dt$LOG10P)))
 
   }else{
