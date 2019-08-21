@@ -193,8 +193,10 @@ singlePlotRACER <- function(assoc_data, chr,
                            legend.title = ggplot2::element_text(face = "bold"),
                            axis.text.x  = ggplot2::element_blank(),
                            axis.ticks.x = ggplot2::element_blank(),
-                           plot.margin  = ggplot2::unit(c(0,0,0,0), "cm"))
-        
+                           plot.margin  = ggplot2::unit(c(0,0,0,0), "cm"),
+                           legend.position      = c(1,1),
+                           legend.justification = c(1,1),
+                           legend.box.margin    = ggplot2::unit(c(10,10,10,10), unit = "pt"))
 
     }else{
         c = ggplot2::ggplot(gene_sub, ggplot2::aes_string(x = "value", y = "y_value")) +
@@ -226,5 +228,5 @@ singlePlotRACER <- function(assoc_data, chr,
     ggpubr::ggarrange(b, c, heights = c(3,1),
                       nrow = 2, ncol = 1,
                       align = "v",
-                      common.legend = TRUE, legend = "right")
+                      common.legend = FALSE)
 }
