@@ -166,7 +166,7 @@ singlePlotRACER <- function(assoc_data, chr,
                                ggplot2::aes(x = lab, y = GENE_NAME, label = GENE_NAME,
                                              hjust = hjust),
                                size = textsize/(14/5)*0.8)+
-            ggplot2::xlab(paste0("Position (chromsome ", chr_in, ")")) +
+            ggplot2::xlab(paste0("Position (chromsome ", chr, ")")) +
             ggplot2::coord_cartesian(xlim = c(start,end)) +
             ggplot2::theme(axis.title         = ggplot2::element_text(face = "bold"),
                            axis.title.y       = ggplot2::element_blank(),
@@ -205,7 +205,7 @@ singlePlotRACER <- function(assoc_data, chr,
                                hjust = -0.1,vjust = 0.3, size = 2.5) +
             ggplot2::theme(axis.title.y = ggplot2::element_text(color = "white", size = 28),
                            axis.text.y = ggplot2::element_blank(),
-                           axis.ticks.y = ggplot2::element_blank()) + ggplot2::xlab(paste0("Chromosome ", chr_in, " Position")) +
+                           axis.ticks.y = ggplot2::element_blank()) + ggplot2::xlab(paste0("Chromosome ", chr, " Position")) +
             ggplot2::coord_cartesian(xlim = c(start,end), ylim = c(0,(max(gene_sub$y_value)+1)))
 
         b = ggplot2::ggplot(in.dt, ggplot2::aes_string(x = "POS", y = "LOG10P")) +
